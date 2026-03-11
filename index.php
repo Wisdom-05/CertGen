@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------
  * This page serves as the entry point for the certification system, 
  * allowing administrators to select appropriate templates or access the 
- * student registry (SF10).
+ * student registry.
  */
 
 $page_title = "Welcome - OCNHS Digital Catalog";
