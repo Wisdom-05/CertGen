@@ -1,0 +1,464 @@
+/* =========================================
+   Certificate Styles (Professional Layout)
+   ========================================= */
+
+@media print {
+    @page {
+        margin: 0 !important;
+        size: A4;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        overflow: hidden !important;
+        background: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .certificate-container {
+        width: 8.27in !important;
+        height: 11.6in !important;
+        /* Slightly less than 11.69 to avoid 2nd page */
+        margin: 0 auto !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        position: relative !important;
+        overflow: hidden !important;
+        /* Force single page */
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+    }
+}
+
+body {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    background-color: #001a4d;
+    background-image:
+        linear-gradient(rgba(0, 45, 114, 0.75), rgba(0, 26, 77, 0.85)),
+        url('../img/school_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 20px;
+    color: #000;
+    min-height: 100vh;
+}
+
+/* Base Mesh Gradient Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: -3;
+    background:
+        radial-gradient(circle at 10% 10%, #002D72 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, #0056b3 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, #00143c 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, #003d8f 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, #FFD70015 0%, transparent 40%);
+    animation: meshMovement 30s ease-in-out infinite alternate;
+    filter: blur(80px);
+}
+
+/* Watermark Background */
+body::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 650px;
+    height: 650px;
+    background-image: url('../img/OCNHS LOGO.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: -1;
+    animation: pulseWatermark 12s ease-in-out infinite;
+}
+
+@keyframes meshMovement {
+    0% { transform: translate(-2%, -2%) rotate(0deg); }
+    100% { transform: translate(2%, 2%) rotate(3deg); }
+}
+
+@keyframes pulseWatermark {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@media print {
+    body::after,
+    body::before {
+        display: none !important;
+    }
+}
+
+.certificate-container {
+    width: 794px;
+    height: 11.23in;
+    /* A4 height */
+    margin: 30px auto;
+    background: #fff;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.old-english {
+    font-family: "Old English Text MT", "Monotype Old English", "Blackletter", serif;
+    font-weight: normal;
+}
+
+.header {
+    position: absolute;
+    top: 0.25in;
+    left: 1.0in;
+    right: 1.0in;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.header-logo {
+    width: 70px;
+    height: auto;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.republic-text {
+    font-size: 12pt;
+    margin: 0;
+    font-family: "Old English Text MT", "Monotype Old English", serif;
+}
+
+.dept-text {
+    font-size: 17pt;
+    margin: 2px 0 5px;
+    font-family: "Old English Text MT", "Monotype Old English", serif;
+    font-weight: bold;
+}
+
+.region-text {
+    font-size: 11pt;
+    margin: 0;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}
+
+.division-text {
+    font-size: 11pt;
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: 0.5px;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}
+
+.school-name {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    margin: 3px 0;
+    font-family: "Times New Roman", serif;
+    line-height: 1.2;
+}
+
+.school-address {
+    font-size: 11pt;
+    margin: 0;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}
+
+.header-line {
+    border-bottom: 2px solid #000;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.date-line {
+    text-align: right;
+    font-size: 11pt;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.title-section {
+    position: absolute;
+    top: 3.2in;
+    left: 1.0in;
+    right: 1.0in;
+    text-align: center;
+}
+
+.cert-label {
+    font-size: 20pt;
+    font-weight: 900;
+    display: block;
+    text-transform: uppercase;
+    font-family: "Bookman Old Style", "Bookman", serif;
+}
+
+.salutation {
+    position: absolute;
+    top: 4.5in;
+    left: 1.0in;
+    right: 1.0in;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 13pt;
+    font-family: "Bookman Old Style", "Bookman", serif;
+}
+
+.content {
+    position: absolute;
+    top: 4.9in;
+    left: 1.0in;
+    right: 1.0in;
+    text-align: justify;
+    font-size: 12pt;
+    line-height: 2.0;
+    /* Change to 2.0 for double spacing */
+    font-family: "Bookman Old Style", "Bookman", serif;
+    max-height: 4.4in;
+    overflow: hidden;
+}
+
+.content.dense-text,
+.content.dense-text p {
+    line-height: 2.0 !important;
+    font-size: 11pt !important;
+}
+
+.content p {
+    text-indent: 50px;
+    margin-bottom: 24px;
+    text-align: justify;
+    line-height: 2.0;
+    overflow-wrap: break-word;
+}
+
+.signatory-section {
+    position: absolute;
+    bottom: 1.8in;
+    left: 1.0in;
+    right: 1.0in;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.dry-seal-box {
+    text-align: left;
+    color: #888;
+    font-size: 8pt;
+    font-style: italic;
+}
+
+.rcc-code {
+    font-size: 5pt;
+    font-style: normal;
+    color: #000;
+}
+
+.principal-box {
+    text-align: center;
+    min-width: 280px;
+}
+
+.principal-name {
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+    padding: 0 15px 2px;
+    font-size: 12pt;
+    display: inline-block;
+}
+
+.principal-title {
+    font-family: "Times New Roman", serif;
+    font-size: 11pt;
+    margin-top: 5px;
+}
+
+.footer-section {
+    position: absolute;
+    bottom: 0.3in;
+    left: 1.0in;
+    right: 1.0in;
+    border-top: 2px solid #000;
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.footer-logos-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.footer-logo {
+    width: 70px;
+    height: 70px;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #555;
+    border: none;
+    overflow: hidden;
+}
+
+.footer-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.footer-text {
+    font-size: 8.5pt;
+    line-height: 1.2;
+    text-align: left;
+    flex: 1;
+    margin-left: -5px;
+}
+
+.footer-text div {
+    white-space: nowrap;
+}
+
+.no-print {
+    text-align: center;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    gap: 15px;
+}
+
+.action-btn {
+    padding: 14px 28px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.print-btn {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #4b5563 0%, #9ca3af 100%);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(107, 114, 128, 0.4);
+    background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.certificate-container button {
+    padding: 12px 24px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #0056b3 0%, #004494 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-container button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1);
+}
+
+/* Floating Home Button */
+.floating-home-btn {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    width: 54px;
+    height: 54px;
+    background: linear-gradient(135deg, #002D72 0%, #0056b3 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 9999;
+    text-decoration: none;
+    border: 2px solid white;
+}
+
+.floating-home-btn:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #003d8f 0%, #0072ff 100%);
+}
+
+.floating-home-btn svg {
+    width: 26px;
+    height: 26px;
+    fill: currentColor;
+}
+
+@media print {
+    .floating-home-btn {
+        display: none !important;
+    }
+}
