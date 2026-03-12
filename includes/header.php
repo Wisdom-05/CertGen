@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <?php
-    // Determine path prefix based on current file location
-    $path_prefix = (basename(dirname($_SERVER['PHP_SELF'])) == 'CertGen') ? '' : '../';
+    // Determine path prefix based on whether assets folder is in the current directory
+    $path_prefix = file_exists('assets/css/style.css') ? '' : '../';
     ?>
     <link rel="stylesheet" href="<?php echo $path_prefix; ?>assets/css/style.css">
 
