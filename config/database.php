@@ -18,12 +18,20 @@ if (getenv('DB_PORT') && getenv('DB_PORT') !== '3306') {
     $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
 }
 
-// Connect with a timeout
-$success = $conn->real_connect($db_host, $db_user, $db_pass, $db_name, (int)$db_port, NULL, MYSQLI_CLIENT_SSL);
+// Connect
+$success = @$conn->real_connect(
+    $db_host, 
+    $db_user, 
+    $db_pass, 
+    $db_name, 
+    (int)$db_port, 
+    NULL, 
+    (getenv('DB_PORT') && getenv('DB_PORT') !== '3306' ? MYSQLI_CLIENT_SSL : 0)
+);
 
 if (!$success) {
     error_log("Database connection failed: " . mysqli_connect_error());
-    // On Render, we want to see the error for debugging
+    // On Render, we want to see the error for debugging. Locally, it helps too.
     die("Database connection failed: " . mysqli_connect_error());
 }
 

@@ -1,11 +1,5 @@
-<?php
-/**
- * welcome.php - Main Landing & Selection Dashboard (Senior Refactor)
- * ---------------------------------------------------------------
- * This page serves as the entry point for the certification system, 
- * allowing administrators to select appropriate templates or access the 
- * student registry.
- */
+require_once 'includes/auth.php';
+require_login();
 
 $page_title = "Welcome - OCNHS Digital Catalog";
 require_once 'includes/header.php';

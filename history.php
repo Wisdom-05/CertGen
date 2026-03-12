@@ -1,5 +1,6 @@
-<?php
+require_once 'includes/auth.php';
 require_once 'config/database.php';
+require_login();
 
 // Handle CSV Download
 if (isset($_GET['download']) && $_GET['download'] === 'csv') {

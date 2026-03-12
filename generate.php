@@ -1,7 +1,5 @@
-<?php
-/**
- * generate.php - Certificate Generation Script (Refactored)
- */
+require_once 'includes/auth.php';
+require_login();
 
 if (!isset($_POST['generate'])) {
     header("Location: index.php");

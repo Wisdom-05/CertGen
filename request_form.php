@@ -1,3 +1,7 @@
+<?php
+require_once 'includes/auth.php';
+require_login();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,9 +1,6 @@
-<?php
-/**
- * db_check.php - Database Connection Diagnostic Tool
- */
-
+require_once 'includes/auth.php';
 require_once 'config/database.php';
+require_login();
 
 echo "<h1>Database Connection Diagnostic</h1>";
 

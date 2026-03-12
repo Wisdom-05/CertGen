@@ -18,16 +18,16 @@ CREATE TABLE IF NOT EXISTS certificate_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS students (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    lrn VARCHAR(20) DEFAULT '',
-    student_name VARCHAR(255) NOT NULL,
-    current_grade VARCHAR(50) DEFAULT '',
-    current_section VARCHAR(100) DEFAULT '',
-    prev_school VARCHAR(255) DEFAULT '',
-    curriculum VARCHAR(255) DEFAULT 'Standard',
-    date_received VARCHAR(100) DEFAULT '',
-    receiver VARCHAR(255) DEFAULT '',
-    remarks TEXT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    full_name VARCHAR(100) DEFAULT '',
+    last_login DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Initial default user: admin / admin123
+INSERT INTO users (username, password, full_name) 
+SELECT 'admin', '$2y$10$gfbYJ6zs8hrywM6y02TuMeC9haoX/xeYp40DW.lfOQTou8Qs33K3a', 'System Administrator'
+WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');

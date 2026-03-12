@@ -1,16 +1,10 @@
-<?php
-/**
- * save_log.php - AJAX endpoint
- * Logs a certificate to the database only when the user prints/saves.
- */
-header('Content-Type: application/json');
+require_once dirname(__DIR__) . '/includes/auth.php';
+require_once dirname(__DIR__) . '/config/database.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+if (!is_logged_in()) {
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
     exit();
 }
-
-require_once dirname(__DIR__) . '/config/database.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
