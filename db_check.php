@@ -13,12 +13,12 @@ if (isset($conn) && $conn->ping()) {
     echo "Host: " . htmlspecialchars(getenv('DB_HOST') ?: 'localhost') . "<br>";
     echo "Database: " . htmlspecialchars(getenv('DB_NAME') ?: 'certgen');
     echo "</div>";
-    
+
     // Check if tables exist
     $result = $conn->query("SHOW TABLES");
     if ($result) {
         echo "<h3>Tables found:</h3><ul>";
-        while($row = $result->fetch_array()) {
+        while ($row = $result->fetch_array()) {
             echo "<li>" . htmlspecialchars($row[0]) . "</li>";
         }
         echo "</ul>";
@@ -26,16 +26,18 @@ if (isset($conn) && $conn->ping()) {
             echo "<p style='color: orange;'>⚠️ No tables found. Did you run the setup_database.sql script?</p>";
         }
     }
-} else {
+}
+else {
     echo "<div style='color: red; font-weight: bold; padding: 20px; border: 2px solid red; border-radius: 8px; background: #fff5f5;'>";
     echo "❌ Connection Failed!<br>";
     if (isset($conn) && $conn->connect_error) {
         echo "Error: " . htmlspecialchars($conn->connect_error);
-    } else {
+    }
+    else {
         echo "The database connection could not be established.";
     }
     echo "</div>";
-    
+
     echo "<h3>Debugging Tips:</h3>";
     echo "<ul>";
     echo "<li>Check your Render Environment Variables (DB_HOST, DB_USER, etc.)</li>";
