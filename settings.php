@@ -46,29 +46,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container" style="max-width: 600px; margin: 40px auto; padding: 20px;">
-    <div class="card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; backdrop-filter: blur(10px);">
-        <h2 style="margin-top: 0; color: #fff; font-size: 24px; font-weight: 700;">Account Settings</h2>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Manage your login credentials and personal information.</p>
+    <div class="card" style="background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h2 style="margin-top: 0; color: #1e293b; font-size: 24px; font-weight: 700;">Account Settings</h2>
+        <p style="color: #64748b; margin-bottom: 30px;">Manage your login credentials and personal information.</p>
 
         <?php if ($msg): ?>
-            <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; color: #86efac; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+            <div style="background: #f0fdf4; border-left: 4px solid #22c55e; color: #166534; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
                 <span style="font-size: 18px; margin-right: 10px;">✅</span> <?php echo $msg; ?>
             </div>
         <?php endif; ?>
 
         <?php if ($error): ?>
-            <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; color: #fca5a5; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+            <div style="background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
                 <span style="font-size: 18px; margin-right: 10px;">⚠️</span> <?php echo $error; ?>
             </div>
         <?php endif; ?>
 
         <form method="POST">
             <div class="form-group floating" style="margin-bottom: 25px;">
-                <input type="text" value="<?php echo htmlspecialchars($_SESSION['username']); ?>" readonly style="background: rgba(0,0,0,0.2); cursor: not-allowed; opacity: 0.6;">
+                <input type="text" value="<?php echo htmlspecialchars($_SESSION['username']); ?>" readonly style="background: #f8fafc; color: #64748b; cursor: not-allowed; border-color: #e2e8f0;">
                 <label>Username</label>
             </div>
 
-            <h3 style="color: #cbd5e1; font-size: 16px; margin: 30px 0 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 25px;">Change Password</h3>
+            <h3 style="color: #475569; font-size: 16px; margin: 30px 0 15px; border-top: 1px solid #f1f5f9; padding-top: 25px;">Change Password</h3>
 
             <div class="form-group floating" style="margin-bottom: 20px;">
                 <input type="password" name="current_password" required placeholder=" ">
@@ -86,15 +86,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div style="display: flex; gap: 15px;">
-                <button type="submit" class="submit-btn" style="flex: 1; padding: 15px; background: linear-gradient(to right, #4f46e5, #818cf8); border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer;">Save Changes</button>
-                <a href="index.php" style="flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #94a3b8; font-weight: 600;">Cancel</a>
+                <button type="submit" class="submit-btn" style="flex: 1; padding: 15px; background: linear-gradient(to right, #4f46e5, #818cf8); border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);">Save Changes</button>
+                <a href="index.php" style="flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #e2e8f0; border-radius: 12px; color: #64748b; font-weight: 600; transition: background 0.3s;">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
 <?php 
-// Special CSS for settings page that mimics the floating labels of the main forms
+// Updated CSS for high contrast
 ?>
 <style>
     .form-group.floating {
@@ -102,11 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     .form-group.floating input {
         width: 100%;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1.2rem 1rem 0.5rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 1.5rem 1rem 0.6rem;
         border-radius: 12px;
-        color: white;
+        color: #1e293b;
         font-family: inherit;
         font-size: 1rem;
         transition: all 0.3s;
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         position: absolute;
         top: 1rem;
         left: 1rem;
-        color: #64748b;
+        color: #94a3b8;
         pointer-events: none;
         transition: all 0.3s;
     }
@@ -124,12 +124,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .form-group.floating input:not(:placeholder-shown) ~ label {
         top: 0.4rem;
         font-size: 0.75rem;
-        color: #818cf8;
+        color: #4f46e5;
+        font-weight: 600;
     }
     .form-group.floating input:focus {
         border-color: #4f46e5;
-        background: rgba(79, 70, 229, 0.05);
+        background: white;
         outline: none;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
     }
 </style>
 
