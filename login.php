@@ -156,8 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 1rem 1.25rem;
             border-radius: 1rem;
             color: white;
