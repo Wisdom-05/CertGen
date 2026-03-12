@@ -40,7 +40,7 @@ $data['grade'] = is_numeric($data['grade_level']) ? "GRADE " . $data['grade_leve
 $formatted_date = date('d F, Y', strtotime($data['date_issued']));
 
 // Fetch Certificate Content
-$cert_content = getCertificateContent($data['cert_type'], $data);
+$cert_content = getCertificateContent($data['certificate_type'], $data);
 $title_text = $cert_content['title'];
 $body_content = $cert_content['body'];
 
