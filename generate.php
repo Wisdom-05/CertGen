@@ -27,7 +27,7 @@ $data = [
     'curriculum' => strtoupper($_POST['curriculum']),
     'school_year' => $_POST['school_year'],
     'purpose' => strtoupper($_POST['purpose']),
-    'cert_type' => strtoupper($_POST['certificate_type']),
+    'certificate_type' => strtoupper($_POST['certificate_type']),
     'principal_name' => $_POST['principal_name'],
     'principal_title' => strtoupper($_POST['principal_title']),
     'rcc_code' => $_POST['rcc_code'] ?? '',
@@ -159,6 +159,15 @@ endif; ?>
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(<?php echo json_encode(array_merge($data, ['date_issued' => $formatted_date])); ?>)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Log saved:', result);
+                    if(result.status === 'error') alert('Error saving history: ' + result.message);
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('System error saving history.');
                 });
             }
         });
