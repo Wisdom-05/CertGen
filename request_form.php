@@ -8,14 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../style/style.css">
 </head>
 <body>
     <div class="watermark-bg"></div>
 
 <div class="container">
     <div class="back-link-container">
-        <a href="index.php" class="back-link">&larr; Back to Selection</a>
+        <a href="welcome.php" class="back-link">&larr; Back to Selection</a>
     </div>
     <h1 class="form-title">OCNHS Certificate Generator</h1>
 

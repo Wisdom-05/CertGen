@@ -1,0 +1,7 @@
+.git
+.env
+Dockerfile
+.dockerignore
+setup_database.sql
+tools
+*.log
