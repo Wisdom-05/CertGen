@@ -11,12 +11,20 @@ $db_pass = getenv('DB_PASS') ?: '';
 $db_name = getenv('DB_NAME') ?: 'certgen';
 $db_port = getenv('DB_PORT') ?: '3306';
 
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
+$conn = mysqli_init();
 
-if ($conn->connect_error) {
-    // For production, you might want to log this instead of dying with details
-    error_log("Database connection failed: " . $conn->connect_error);
-    die("Database connection failed. Please check the logs.");
+// If we are on a custom port (like Aiven's 11655), enable SSL
+if (getenv('DB_PORT') && getenv('DB_PORT') !== '3306') {
+    $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
+}
+
+// Connect with a timeout
+$success = $conn->real_connect($db_host, $db_user, $db_pass, $db_name, (int)$db_port, NULL, MYSQLI_CLIENT_SSL);
+
+if (!$success) {
+    error_log("Database connection failed: " . mysqli_connect_error());
+    // On Render, we want to see the error for debugging
+    die("Database connection failed: " . mysqli_connect_error());
 }
 
 $conn->set_charset("utf8mb4");
