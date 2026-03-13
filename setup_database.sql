@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS certificate_logs (
     purpose VARCHAR(255) DEFAULT '',
     date_issued VARCHAR(50) NOT NULL,
     principal_name VARCHAR(100) DEFAULT '',
+    generated_by INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
