@@ -159,14 +159,25 @@ endif; ?>
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(<?php echo json_encode(array_merge($data, ['date_issued' => $formatted_date])); ?>)
                 })
-                .then(response => response.json())
+                .then(async response => {
+                    const text = await response.text();
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Invalid server response: ' + text.substring(0, 100));
+                    }
+                })
                 .then(result => {
-                    console.log('Log saved:', result);
-                    if(result.status === 'error') alert('Error saving history: ' + result.message);
+                    console.log('Log response:', result);
+                    if (result.status === 'success') {
+                        celebrate();
+                    } else {
+                        alert('Error saving history: ' + result.message);
+                    }
                 })
                 .catch(err => {
-                    console.error('Error:', err);
-                    alert('System error saving history.');
+                    console.error('Save Error:', err);
+                    alert('System Error: ' + err.message + '\n\nPlease check if your database is connected and refreshed.');
                 });
             }
         });
