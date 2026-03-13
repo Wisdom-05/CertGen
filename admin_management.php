@@ -60,22 +60,23 @@ if (isset($_POST['create_admin'])) {
     }
 }
 
-// Handle admin deletion
-if (isset($_POST['delete_admin'])) {
+// Handle admin status toggle (Enable/Disable)
+if (isset($_POST['toggle_status'])) {
     $admin_id = $_POST['admin_id'] ?? '';
+    $current_status = $_POST['current_status'] ?? '';
+    $new_status = ($current_status === 'enabled') ? 'disabled' : 'enabled';
     
-    // Safety check: ensure we are not deleting a super_admin
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role = 'admin'");
-    $stmt->bind_param("i", $admin_id);
+    $stmt = $conn->prepare("UPDATE users SET status = ? WHERE id = ? AND role = 'admin'");
+    $stmt->bind_param("si", $new_status, $admin_id);
     if ($stmt->execute()) {
-        $msg = "Admin account deleted successfully!";
+        $msg = "Admin account " . ($new_status === 'enabled' ? 'enabled' : 'disabled') . " successfully!";
     } else {
-        $error = "Failed to delete admin account.";
+        $error = "Failed to update admin status.";
     }
 }
 
 // Fetch all admins
-$admins = $conn->query("SELECT id, username, full_name, last_login FROM users WHERE role = 'admin' ORDER BY created_at DESC");
+$admins = $conn->query("SELECT id, username, full_name, last_login, status FROM users WHERE role = 'admin' ORDER BY created_at DESC");
 
 $page_title = "Admin Management";
 require_once 'includes/header.php';
@@ -110,6 +111,7 @@ require_once 'includes/header.php';
                 <tr style="background: rgba(255, 255, 255, 0.05);">
                     <th style="padding: 20px; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Admin Name</th>
                     <th style="padding: 20px; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Username</th>
+                    <th style="padding: 20px; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Status</th>
                     <th style="padding: 20px; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Last Login</th>
                     <th style="padding: 20px; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Actions</th>
                 </tr>
@@ -117,7 +119,7 @@ require_once 'includes/header.php';
             <tbody>
                 <?php if ($admins->num_rows > 0): ?>
                     <?php while ($admin = $admins->fetch_assoc()): ?>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.3s; <?php echo $admin['status'] === 'disabled' ? 'opacity: 0.6;' : ''; ?>" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 20px; color: white;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <div style="width: 35px; height: 35px; background: rgba(79, 70, 229, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #818cf8; font-weight: 700;">
@@ -127,6 +129,13 @@ require_once 'includes/header.php';
                                 </div>
                             </td>
                             <td style="padding: 20px; color: #cbd5e1;"><?php echo htmlspecialchars($admin['username']); ?></td>
+                            <td style="padding: 20px;">
+                                <?php if ($admin['status'] === 'enabled'): ?>
+                                    <span style="background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(34, 197, 94, 0.2);">Active</span>
+                                <?php else: ?>
+                                    <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(239, 68, 68, 0.2);">Disabled</span>
+                                <?php endif; ?>
+                            </td>
                             <td style="padding: 20px; color: #94a3b8;">
                                 <?php echo $admin['last_login'] ? date('M j, Y, g:i a', strtotime($admin['last_login'])) : '<span style="color: #64748b; font-style: italic;">Never logged in</span>'; ?>
                             </td>
@@ -135,8 +144,8 @@ require_once 'includes/header.php';
                                     <button onclick="openChangePasswordModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars($admin['username']); ?>')" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white';" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.color='#cbd5e1';">
                                         🔑 Password
                                     </button>
-                                    <button onclick="openDeleteModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars($admin['username']); ?>')" style="background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.color='white';" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'; this.style.color='#fca5a5';">
-                                        🗑️ Delete
+                                    <button onclick="openStatusModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars($admin['username']); ?>', '<?php echo $admin['status']; ?>')" style="background: <?php echo $admin['status'] === 'enabled' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)'; ?>; color: <?php echo $admin['status'] === 'enabled' ? '#fca5a5' : '#4ade80'; ?>; border: 1px solid <?php echo $admin['status'] === 'enabled' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(34, 197, 94, 0.2)'; ?>; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.filter='brightness(1.2)';" onmouseout="this.style.filter='brightness(1)';">
+                                        <?php echo $admin['status'] === 'enabled' ? '🚫 Disable' : '✅ Enable'; ?>
                                     </button>
                                 </div>
                             </td>
@@ -144,7 +153,7 @@ require_once 'includes/header.php';
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="4" style="padding: 60px; text-align: center; color: #64748b;">
+                        <td colspan="5" style="padding: 60px; text-align: center; color: #64748b;">
                             <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">👤</div>
                             <p>No admin accounts found other than Super Admin.</p>
                         </td>
@@ -203,17 +212,18 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Delete Admin Modal -->
-<div id="deleteModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+<!-- Status Toggle Modal -->
+<div id="statusModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #1e293b; width: 100%; max-width: 400px; border-radius: 24px; padding: 40px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); text-align: center; animation: modalFade 0.3s ease-out;">
-        <div style="width: 70px; height: 70px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2rem; color: #ef4444;">⚠️</div>
-        <h2 style="color: white; margin-top: 0; margin-bottom: 10px;">Confirm Deletion</h2>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Are you sure you want to delete admin <strong id="deleteAdminUsername" style="color: white;"></strong>? This action cannot be undone.</p>
+        <div id="statusIcon" style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2rem;"></div>
+        <h2 style="color: white; margin-top: 0; margin-bottom: 10px;" id="statusTitle"></h2>
+        <p style="color: #94a3b8; margin-bottom: 30px;" id="statusText"></p>
         <form method="POST">
-            <input type="hidden" name="admin_id" id="delete_admin_id">
+            <input type="hidden" name="admin_id" id="status_admin_id">
+            <input type="hidden" name="current_status" id="status_current">
             <div style="display: flex; gap: 12px;">
-                <button type="submit" name="delete_admin" style="flex: 2; background: #ef4444; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.3s;">Delete Account</button>
-                <button type="button" onclick="document.getElementById('deleteModal').style.display='none'" style="flex: 1; background: transparent; border: 1px solid #334155; color: #cbd5e1; padding: 14px; border-radius: 12px; cursor: pointer;">Cancel</button>
+                <button type="submit" name="toggle_status" id="statusSubmitBtn" style="flex: 2; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.3s;"></button>
+                <button type="button" onclick="document.getElementById('statusModal').style.display='none'" style="flex: 1; background: transparent; border: 1px solid #334155; color: #cbd5e1; padding: 14px; border-radius: 12px; cursor: pointer;">Cancel</button>
             </div>
         </form>
     </div>
@@ -226,10 +236,32 @@ function openChangePasswordModal(id, username) {
     document.getElementById('passwordModal').style.display = 'flex';
 }
 
-function openDeleteModal(id, username) {
-    document.getElementById('delete_admin_id').value = id;
-    document.getElementById('deleteAdminUsername').innerText = username;
-    document.getElementById('deleteModal').style.display = 'flex';
+function openStatusModal(id, username, status) {
+    const isEnabling = status === 'disabled';
+    document.getElementById('status_admin_id').value = id;
+    document.getElementById('status_current').value = status;
+    
+    document.getElementById('statusTitle').innerText = isEnabling ? 'Enable Account' : 'Disable Account';
+    document.getElementById('statusText').innerHTML = `Are you sure you want to ${isEnabling ? 'enable' : 'disable'} admin <strong style="color: white;">${username}</strong>?`;
+    
+    const icon = document.getElementById('statusIcon');
+    const submitBtn = document.getElementById('statusSubmitBtn');
+    
+    if (isEnabling) {
+        icon.style.background = 'rgba(34, 197, 94, 0.1)';
+        icon.style.color = '#4ade80';
+        icon.innerText = '✅';
+        submitBtn.style.background = '#22c55e';
+        submitBtn.innerText = 'Enable Account';
+    } else {
+        icon.style.background = 'rgba(239, 68, 68, 0.1)';
+        icon.style.color = '#ef4444';
+        icon.innerText = '🚫';
+        submitBtn.style.background = '#ef4444';
+        submitBtn.innerText = 'Disable Account';
+    }
+    
+    document.getElementById('statusModal').style.display = 'flex';
 }
 
 // Close modals if clicked outside
@@ -240,8 +272,8 @@ window.onclick = function(event) {
     if (event.target == document.getElementById('passwordModal')) {
         document.getElementById('passwordModal').style.display = 'none';
     }
-    if (event.target == document.getElementById('deleteModal')) {
-        document.getElementById('deleteModal').style.display = 'none';
+    if (event.target == document.getElementById('statusModal')) {
+        document.getElementById('statusModal').style.display = 'none';
     }
 }
 </script>

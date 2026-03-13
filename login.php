@@ -15,13 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (!empty($username) && !empty($password)) {
-        $stmt = $conn->prepare("SELECT id, username, password, full_name, role FROM users WHERE username = ?");
+        $stmt = $conn->prepare("SELECT id, username, password, full_name, role, status FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($user = $result->fetch_assoc()) {
-            if (password_verify($password, $user['password'])) {
+            if ($user['status'] === 'disabled') {
+                $error = "Your account has been disabled. Please contact the Super Admin.";
+            } elseif (password_verify($password, $user['password'])) {
                 // Login successful
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['full_name'];
