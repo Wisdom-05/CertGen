@@ -29,4 +29,22 @@ function require_login() {
 function get_user() {
     return $_SESSION['user_name'] ?? 'Guest';
 }
+
+/**
+ * Check if user is super admin
+ */
+function is_super_admin() {
+    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'super_admin';
+}
+
+/**
+ * Require super admin role for a page
+ */
+function require_super_admin() {
+    require_login();
+    if (!is_super_admin()) {
+        header("Location: index.php?error=unauthorized");
+        exit();
+    }
+}
 ?>

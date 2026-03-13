@@ -28,6 +28,9 @@
                     <span>Welcome, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong></span>
                 </div>
                 <a href="<?php echo $path_prefix; ?>settings.php" class="nav-item">Settings</a>
+                <?php if (is_super_admin()): ?>
+                    <a href="<?php echo $path_prefix; ?>admin_management.php" class="nav-item">Admin Management</a>
+                <?php endif; ?>
                 <a href="<?php echo $path_prefix; ?>logout.php" class="nav-item logout">Logout</a>
             </div>
         </div>
