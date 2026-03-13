@@ -31,7 +31,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
         $where .= " AND YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
     }
 
-    $sql = "SELECT id, certificate_type, student_name, lrn, grade_level, section_track, curriculum, school_year, purpose, date_issued, principal_name, created_at FROM certificate_logs WHERE 1=1 $where ORDER BY created_at DESC";
+    $sql = "SELECT cl.*, u.full_name as generated_by_name FROM certificate_logs cl LEFT JOIN users u ON cl.generated_by = u.id WHERE 1=1 $where ORDER BY cl.created_at DESC";
     $stmt = $conn->prepare($sql);
     if (!empty($params)) {
         $stmt->bind_param($types, ...$params);
@@ -84,14 +84,31 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
     fputcsv($output, []); // Spacer
 
     // 3. Raw Data Header
-    fputcsv($output, ['DETAILED ISSUANCE LOG']);
-    fputcsv($output, ['#', 'Certificate Type', 'Student Name', 'LRN', 'Grade Level', 'Section/Track', 'Curriculum', 'School Year', 'Purpose', 'Date Issued', 'Principal', 'Generated At']);
+    $csv_header = ['#', 'Certificate Type', 'Student Name', 'LRN', 'Grade Level', 'Section/Track', 'Curriculum', 'School Year', 'Purpose', 'Date Issued', 'Principal', 'Generated At'];
+    if (is_super_admin()) {
+        $csv_header[] = 'Issued By';
+    }
+    fputcsv($output, $csv_header);
 
     $counter = 1;
     foreach ($all_records as $row) {
-        // Replace ID with counter for cleaner export
-        $export_row = array_values($row);
-        $export_row[0] = $counter++;
+        $export_row = [
+            $counter++,
+            $row['certificate_type'],
+            $row['student_name'],
+            $row['lrn'],
+            $row['grade_level'],
+            $row['section_track'],
+            $row['curriculum'],
+            $row['school_year'],
+            $row['purpose'],
+            $row['date_issued'],
+            $row['principal_name'],
+            $row['created_at']
+        ];
+        if (is_super_admin()) {
+            $export_row[] = $row['generated_by_name'] ?: 'Unknown';
+        }
         fputcsv($output, $export_row);
     }
     
@@ -127,7 +144,7 @@ if (!$is_filtered) {
     $where .= " AND YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
 }
 
-$sql = "SELECT id, certificate_type, student_name, lrn, grade_level, section_track, curriculum, school_year, purpose, date_issued, principal_name, created_at FROM certificate_logs WHERE 1=1 $where ORDER BY created_at DESC";
+$sql = "SELECT cl.*, u.full_name as generated_by_name FROM certificate_logs cl LEFT JOIN users u ON cl.generated_by = u.id WHERE 1=1 $where ORDER BY cl.created_at DESC";
 $stmt = $conn->prepare($sql);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
@@ -317,7 +334,10 @@ while ($crow = $chart_result->fetch_assoc()) {
                     <th>Grade</th>
                     <th>School Year</th>
                     <th>Purpose</th>
-                    <th>Date Issued</th>
+                    <th>Principal</th>
+                    <?php if (is_super_admin()): ?>
+                        <th>Issued By</th>
+                    <?php endif; ?>
                     <th>Generated At</th>
                 </tr>
             </thead>
@@ -331,8 +351,13 @@ while ($crow = $chart_result->fetch_assoc()) {
                     <td><?= htmlspecialchars($row['grade_level']) ?></td>
                     <td><?= htmlspecialchars($row['school_year']) ?></td>
                     <td><?= htmlspecialchars($row['purpose']) ?></td>
-                    <td><?= htmlspecialchars($row['date_issued']) ?></td>
-                    <td class="cell-timestamp"><?= date('M d, Y h:i A', strtotime($row['created_at'])) ?></td>
+                    <td><?php echo htmlspecialchars($row['date_issued']); ?></td>
+                    <?php if (is_super_admin()): ?>
+                        <td class="cell-generator">
+                            <span class="admin-badge"><?php echo htmlspecialchars($row['generated_by_name'] ?: 'System'); ?></span>
+                        </td>
+                    <?php endif; ?>
+                    <td class="cell-timestamp"><?php echo date('M d, Y h:i A', strtotime($row['created_at'])); ?></td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>

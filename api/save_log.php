@@ -13,8 +13,8 @@ if (!$data || empty($data['certificate_type']) || empty($data['student_name'])) 
     exit();
 }
 
-$stmt = $conn->prepare("INSERT INTO certificate_logs (certificate_type, student_name, lrn, grade_level, section_track, curriculum, school_year, purpose, date_issued, principal_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssssssss",
+$stmt = $conn->prepare("INSERT INTO certificate_logs (certificate_type, student_name, lrn, grade_level, section_track, curriculum, school_year, purpose, date_issued, principal_name, generated_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssssssi",
     $data['certificate_type'],
     $data['student_name'],
     $data['lrn'],
@@ -24,7 +24,8 @@ $stmt->bind_param("ssssssssss",
     $data['school_year'],
     $data['purpose'],
     $data['date_issued'],
-    $data['principal_name']
+    $data['principal_name'],
+    $_SESSION['user_id']
 );
 $stmt->execute();
 $stmt->close();
