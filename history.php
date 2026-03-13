@@ -13,22 +13,22 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
     
     if ($is_filtered) {
         if (!empty($_GET['date_from'])) {
-            $where .= " AND created_at >= ?";
+            $where .= " AND cl.created_at >= ?";
             $params[] = $_GET['date_from'] . " 00:00:00";
             $types .= "s";
         }
         if (!empty($_GET['date_to'])) {
-            $where .= " AND created_at <= ?";
+            $where .= " AND cl.created_at <= ?";
             $params[] = $_GET['date_to'] . " 23:59:59";
             $types .= "s";
         }
         if (!empty($_GET['cert_type'])) {
-            $where .= " AND certificate_type = ?";
+            $where .= " AND cl.certificate_type = ?";
             $params[] = $_GET['cert_type'];
             $types .= "s";
         }
     } else {
-        $where .= " AND YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
+        $where .= " AND YEARWEEK(cl.created_at, 1) = YEARWEEK(CURDATE(), 1)";
     }
 
     $sql = "SELECT cl.*, u.full_name as generated_by_name FROM certificate_logs cl LEFT JOIN users u ON cl.generated_by = u.id WHERE 1=1 $where ORDER BY cl.created_at DESC";
@@ -124,24 +124,24 @@ $params = [];
 $types = "";
 
 if (!empty($_GET['date_from'])) {
-    $where .= " AND created_at >= ?";
+    $where .= " AND cl.created_at >= ?";
     $params[] = $_GET['date_from'] . " 00:00:00";
     $types .= "s";
 }
 if (!empty($_GET['date_to'])) {
-    $where .= " AND created_at <= ?";
+    $where .= " AND cl.created_at <= ?";
     $params[] = $_GET['date_to'] . " 23:59:59";
     $types .= "s";
 }
 if (!empty($_GET['cert_type'])) {
-    $where .= " AND certificate_type = ?";
+    $where .= " AND cl.certificate_type = ?";
     $params[] = $_GET['cert_type'];
     $types .= "s";
 }
 
 // Optimization: If NOT filtered, only show records from the current calendar week
 if (!$is_filtered) {
-    $where .= " AND YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
+    $where .= " AND YEARWEEK(cl.created_at, 1) = YEARWEEK(CURDATE(), 1)";
 }
 
 $sql = "SELECT cl.*, u.full_name as generated_by_name FROM certificate_logs cl LEFT JOIN users u ON cl.generated_by = u.id WHERE 1=1 $where ORDER BY cl.created_at DESC";
