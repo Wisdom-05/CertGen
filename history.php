@@ -351,7 +351,7 @@ while ($crow = $chart_result->fetch_assoc()) {
                     <td><?= htmlspecialchars($row['grade_level']) ?></td>
                     <td><?= htmlspecialchars($row['school_year']) ?></td>
                     <td><?= htmlspecialchars($row['purpose']) ?></td>
-                    <td><?php echo htmlspecialchars($row['date_issued']); ?></td>
+                    <td><?php echo htmlspecialchars($row['principal_name']); ?></td>
                     <?php if (is_super_admin()): ?>
                         <td class="cell-generator">
                             <span class="admin-badge"><?php echo htmlspecialchars($row['generated_by_name'] ?: 'System'); ?></span>
