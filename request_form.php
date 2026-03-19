@@ -431,37 +431,41 @@ require_login();
                     item.style.display = showHistorical ? '' : 'none';
                 });
 
-                // Only reset if it's a dynamic change, not on first load
-                // (Handled by restoreDropdownUI and state management)
-
-                // GMC Normal Request Specific Visibility
-                if (certSelect.value === 'GOOD MORAL CHARACTER') {
-                    // Hide almost everything for simplicity
+                // Standard Visibility for certificates
+                if (certSelect.value.startsWith('GOOD MORAL CHARACTER')) {
+                    schoolLevelGroup.style.display = certSelect.value === 'GOOD MORAL CHARACTER' ? 'none' : 'block';
+                } else {
                     schoolLevelGroup.style.display = 'none';
+                }
+
+                // Show basic fields for everyone except maybe GMC Normal
+                lrnGroup.style.display = 'block';
+                gradeGroup.style.display = 'block';
+                sectionGroup.style.display = 'block';
+                curriculumGroup.style.display = 'block';
+
+                // Specific Required/Optional logic
+                if (certSelect.value === 'CERTIFICATE OF GRADUATION') {
+                    // Graduation: LRN and Grade are optional as they might not be in old records
+                    lrnInput.required = false;
+                    gradeInput.required = false;
+                    lrnGroup.querySelector('label').textContent = "LRN (Optional)";
+                    gradeGroup.querySelector('label').textContent = "Grade / Year Level (Optional)";
+                    sectionGroup.querySelector('label').textContent = "Section / Strand / Track (Optional)";
+                } else if (certSelect.value === 'GOOD MORAL CHARACTER') {
+                    // GMC Normal: Hide fields to keep it simple as per original logic
                     lrnGroup.style.display = 'none';
                     lrnInput.required = false;
                     gradeGroup.style.display = 'none';
                     gradeInput.required = false;
                     sectionGroup.style.display = 'none';
-                    
-                    // Keep Curriculum visible as requested
-                    curriculumGroup.style.display = 'block';
-                    curriculumInput.required = true;
                 } else {
-                    // Standard Visibility for other certificates
-                    if (certSelect.value.startsWith('GOOD MORAL CHARACTER')) {
-                        schoolLevelGroup.style.display = 'block';
-                    } else {
-                        schoolLevelGroup.style.display = 'none';
-                    }
-
-                    lrnGroup.style.display = 'block';
+                    // All other certificates: Required by default
                     lrnInput.required = true;
-                    gradeGroup.style.display = 'block';
                     gradeInput.required = true;
-                    sectionGroup.style.display = 'block';
-                    curriculumGroup.style.display = 'block';
-                    curriculumInput.required = false;
+                    lrnGroup.querySelector('label').textContent = "LRN (if applicable)";
+                    gradeGroup.querySelector('label').textContent = "Grade / Year Level";
+                    sectionGroup.querySelector('label').textContent = "Section / Strand / Track";
                 }
             }
 
