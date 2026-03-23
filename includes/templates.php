@@ -128,9 +128,9 @@ function get_certificate_content($type, $data)
             break;
 
         case 'CERTIFICATE OF GRADUATION':
-            $content['title'] = "CERTIFICATE OF<br>GRADUATION";
-            $content['body'] = "<p>This is to certify that $student_info has satisfactorily completed the requirements for graduation from the Secondary Graduate Curriculum at this school during the School Year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong> purpose only.</p>";
+            $content['title'] = "CERTIFICATION";
+            $content['body'] .= "<p>This is to certify that $student_info graduated under <strong>$curriculum</strong> of the school year <strong>$sy</strong>.</p>";
+            $content['body'] .= "<p>This certification is issued upon the request of the above-named person as a requirement for <strong>$purpose</strong> purposes.</p>";
             break;
 
         case 'CERTIFICATE OF COMPLETION':
