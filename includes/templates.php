@@ -26,7 +26,7 @@ function get_certificate_types($include_all = false)
     ];
 
     global $conn;
-    
+
     // Attempt to require config if connection not available
     if (!isset($conn) && file_exists(__DIR__ . '/../config/database.php')) {
         require_once __DIR__ . '/../config/database.php';
@@ -49,7 +49,7 @@ function get_certificate_types($include_all = false)
 
     $all_types = array_unique(array_merge($default_types, $custom_types));
     $active_types = [];
-    
+
     foreach ($all_types as $type) {
         if ($include_all || !in_array($type, $disabled_types)) {
             $active_types[] = $type;
@@ -207,10 +207,10 @@ function get_certificate_content($type, $data)
                     '[division]' => $division,
                     '[level_wording]' => $level_wording
                 ];
-                
+
                 $title = str_replace(array_keys($replacements), array_values($replacements), $row['title']);
                 $body = str_replace(array_keys($replacements), array_values($replacements), $row['body']);
-                
+
                 return [
                     'title' => $title,
                     'body' => $body
@@ -237,8 +237,8 @@ function get_certificate_content($type, $data)
 
         case 'CERTIFICATE OF COMPLETION':
             $content['title'] = "CERTIFICATE OF COMPLETION";
-            $content['body'] = "<p>This is to certify that $student_info has satisfactorily completed the requirements for Junior High School at this school during the School Year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong> purpose only.</p>";
+            $content['body'] .= "<p>This is to certify that $sn with <strong>LRN $lrn</strong> was a <strong>$grade COMPLETER</strong> of this school under <strong>$curriculum</strong> during the school year <strong>$sy</strong>. He/She has satisfactory completed the requirements of Junior High School.</p>";
+            $content['body'] .= "<p>This certification is issued upon the request of the above-named person as a requirement for <strong>$purpose</strong> purposes.</p>";
             break;
 
         case 'GOOD MORAL CHARACTER':
