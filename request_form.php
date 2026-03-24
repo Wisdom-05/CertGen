@@ -231,6 +231,7 @@ require_login();
                         <div class="option-item k12-curriculum" data-value="K TO 12 SCIENCE, TECHNOLOGY, ENGINEERING AND MATHEMATICS (STEM)">K TO 12 SCIENCE, TECHNOLOGY, ENGINEERING AND MATHEMATICS (STEM)</div>
                         <div class="option-item k12-curriculum" data-value="K TO 12 ARTS AND DESIGN (ADT)">K TO 12 ARTS AND DESIGN (ADT)</div>
                         <div class="option-item k12-curriculum" data-value="K TO 12 TECHNICAL AND VOCATIONAL LIVELIHOOD (TVL)">K TO 12 TECHNICAL AND VOCATIONAL LIVELIHOOD (TVL)</div>
+                        <div class="option-item k12-curriculum" data-value="K TO 12 DISTANCE LEARNING PROGRAM (DLP)">K TO 12 DISTANCE LEARNING PROGRAM (DLP)</div>
                     </div>
                 </div>
             </div>
