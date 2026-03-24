@@ -6,9 +6,9 @@
 /**
  * Returns an array of available certificate types.
  */
-function get_certificate_types()
+function get_certificate_types($include_all = false)
 {
-    return [
+    $default_types = [
         'CERTIFICATE OF ENROLLMENT',
         'GOOD MORAL CHARACTER',
         'GOOD MORAL CHARACTER (COLLEGE/SHS ADMISSION)',
@@ -24,6 +24,60 @@ function get_certificate_types()
         'SCHOLARSHIP RECOMMENDATION',
         'SCHOOL ACCREDITATION CERTIFICATE'
     ];
+
+    global $conn;
+    
+    // Attempt to require config if connection not available
+    if (!isset($conn) && file_exists(__DIR__ . '/../config/database.php')) {
+        require_once __DIR__ . '/../config/database.php';
+    }
+
+    $custom_types = [];
+    $disabled_types = [];
+
+    if (isset($conn) && $conn) {
+        $res = $conn->query("SELECT certificate_type, status FROM templates");
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                if ($row['status'] === 'disabled') {
+                    $disabled_types[] = $row['certificate_type'];
+                }
+                $custom_types[] = $row['certificate_type'];
+            }
+        }
+    }
+
+    $all_types = array_unique(array_merge($default_types, $custom_types));
+    $active_types = [];
+    
+    foreach ($all_types as $type) {
+        if ($include_all || !in_array($type, $disabled_types)) {
+            $active_types[] = $type;
+        }
+    }
+
+    return array_values($active_types);
+}
+
+function is_default_template($type)
+{
+    $default_types = [
+        'CERTIFICATE OF ENROLLMENT',
+        'GOOD MORAL CHARACTER',
+        'GOOD MORAL CHARACTER (COLLEGE/SHS ADMISSION)',
+        'GOOD MORAL CHARACTER (SCHOOL TRANSFER)',
+        'CERTIFICATE OF GRADUATION',
+        'CERTIFICATE OF COMPLETION',
+        'CERTIFICATE OF RANKING',
+        'TRANSFER CERTIFICATION',
+        'CERTIFICATE OF NON-ISSUANCE OF YEARBOOK',
+        'CERTIFICATE OF NON-ISSUANCE OF ID',
+        'LOST ID CERTIFICATION',
+        'RECORD DAMAGE CERTIFICATION',
+        'SCHOLARSHIP RECOMMENDATION',
+        'SCHOOL ACCREDITATION CERTIFICATE'
+    ];
+    return in_array($type, $default_types);
 }
 
 /**
@@ -120,6 +174,54 @@ function get_certificate_content($type, $data)
         'body' => ''
     ];
 
+    $level_wording = ($school_level === 'SENIOR HIGH SCHOOL') ? 'SENIOR HIGH SCHOOL' : 'JUNIOR HIGH SCHOOL';
+
+    global $conn;
+    // Ensure DB connection is loaded
+    if (!isset($conn)) {
+        if (file_exists(__DIR__ . '/../config/database.php')) {
+            require_once __DIR__ . '/../config/database.php';
+        }
+    }
+
+    // Try fetching from database first
+    if (isset($conn) && $conn) {
+        $stmt = $conn->prepare("SELECT title, body FROM templates WHERE certificate_type = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $type);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            if ($row = $res->fetch_assoc()) {
+                $replacements = [
+                    '[student_info]' => $student_info,
+                    '[sn]' => $sn,
+                    '[lrn]' => $lrn,
+                    '[lrn_text]' => $lrn_text,
+                    '[grade]' => $grade,
+                    '[section]' => $section,
+                    '[curriculum]' => $curriculum,
+                    '[sy]' => $sy,
+                    '[purpose]' => $purpose,
+                    '[school_name]' => $school_name,
+                    '[school_address]' => $school_address,
+                    '[division]' => $division,
+                    '[level_wording]' => $level_wording
+                ];
+                
+                $title = str_replace(array_keys($replacements), array_values($replacements), $row['title']);
+                $body = str_replace(array_keys($replacements), array_values($replacements), $row['body']);
+                
+                return [
+                    'title' => $title,
+                    'body' => $body
+                ];
+            }
+            $stmt->close();
+        }
+    }
+
+    // Fallback to defaults
+
     switch ($type) {
         case 'CERTIFICATE OF ENROLLMENT':
             $content['title'] = "CERTIFICATION";
@@ -134,7 +236,7 @@ function get_certificate_content($type, $data)
             break;
 
         case 'CERTIFICATE OF COMPLETION':
-            $content['title'] = "CERTIFICATE OF<br>COMPLETION";
+            $content['title'] = "CERTIFICATE OF COMPLETION";
             $content['body'] = "<p>This is to certify that $student_info has satisfactorily completed the requirements for Junior High School at this school during the School Year <strong>$sy</strong>.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong> purpose only.</p>";
             break;
@@ -161,7 +263,7 @@ function get_certificate_content($type, $data)
             break;
 
         case 'CERTIFICATE OF RANKING':
-            $content['title'] = "CERTIFICATE OF<br>RANKING";
+            $content['title'] = "CERTIFICATE OF RANKING";
             $content['body'] = "<p>This is to certify that $student_info is officially ranked among the students of <strong>$grade - $section</strong> under <strong>$curriculum</strong> during the School Year <strong>$sy</strong>.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student for <strong>$purpose</strong> purposes.</p>";
             break;

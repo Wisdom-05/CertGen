@@ -98,17 +98,17 @@ $current_user = $stmt->get_result()->fetch_assoc();
             <h3 style="color: #475569; font-size: 16px; margin: 30px 0 15px; border-top: 1px solid #f1f5f9; padding-top: 25px;">Change Password</h3>
 
             <div class="form-group floating" style="margin-bottom: 20px;">
-                <input type="password" name="current_password" required placeholder=" ">
+                <input type="password" name="current_password" placeholder=" ">
                 <label>Current Password</label>
             </div>
 
             <div class="form-group floating" style="margin-bottom: 20px;">
-                <input type="password" name="new_password" required placeholder=" ">
+                <input type="password" name="new_password" placeholder=" ">
                 <label>New Password</label>
             </div>
 
             <div class="form-group floating" style="margin-bottom: 30px;">
-                <input type="password" name="confirm_password" required placeholder=" ">
+                <input type="password" name="confirm_password" placeholder=" ">
                 <label>Confirm New Password</label>
             </div>
 

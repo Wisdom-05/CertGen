@@ -29,7 +29,13 @@
                 </div>
                 <a href="<?php echo $path_prefix; ?>settings.php" class="nav-item">Settings</a>
                 <?php if (is_super_admin()): ?>
-                    <a href="<?php echo $path_prefix; ?>admin_management.php" class="nav-item">Admin Management</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-item dropbtn" style="color: #cbd5e1; outline: none; border: none; cursor: pointer; transition: color 0.3s; font-size: 0.95rem; font-weight: 500; background: none; padding: 0;">Admin Options ▾</button>
+                        <div class="dropdown-content">
+                            <a href="<?php echo $path_prefix; ?>admin_management.php">Admin Management</a>
+                            <a href="<?php echo $path_prefix; ?>template_management.php">Templates</a>
+                        </div>
+                    </div>
                 <?php endif; ?>
                 <a href="<?php echo $path_prefix; ?>logout.php" class="nav-item logout">Logout</a>
             </div>
@@ -84,6 +90,75 @@
         .nav-item:hover {
             color: white;
         }
+        
+        /* Dropdown Styles */
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1001;
+            border-radius: 8px;
+            overflow: hidden;
+            top: 100%;
+            margin-top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 12px;
+            height: 12px;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dropdown-content a {
+            color: #cbd5e1;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        /* Invisible hover bridge */
+        .nav-dropdown::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            right: 0;
+            height: 15px;
+        }
+        .nav-dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .nav-dropdown:hover .dropbtn {
+            color: white !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
         .nav-item.logout {
             background: rgba(239, 68, 68, 0.1);
             color: #fca5a5;

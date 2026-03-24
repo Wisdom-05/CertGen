@@ -8,26 +8,43 @@ require_super_admin();
 $msg = '';
 $error = '';
 
-// Handle password change for an admin
-if (isset($_POST['change_password'])) {
+// Handle admin update (Name & optionally Password)
+if (isset($_POST['edit_admin'])) {
     $admin_id = $_POST['admin_id'] ?? '';
+    $full_name = trim($_POST['full_name'] ?? '');
     $new_password = $_POST['new_password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
-    if (empty($new_password) || empty($confirm_password)) {
-        $error = "Password fields are required.";
-    } elseif ($new_password !== $confirm_password) {
-        $error = "Passwords do not match.";
-    } elseif (strlen($new_password) < 6) {
-        $error = "Password must be at least 6 characters.";
+    if (empty($full_name)) {
+        $error = "Full Name is required.";
     } else {
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ? AND role = 'admin'");
-        $stmt->bind_param("si", $hashed_password, $admin_id);
+        // Update name unconditionally
+        $stmt = $conn->prepare("UPDATE users SET full_name = ? WHERE id = ? AND role = 'admin'");
+        $stmt->bind_param("si", $full_name, $admin_id);
         if ($stmt->execute()) {
-            $msg = "Admin password updated successfully!";
+            $msg = "Admin profile updated successfully!";
         } else {
-            $error = "Failed to update admin password.";
+            $error = "Failed to update admin profile.";
+        }
+        $stmt->close();
+
+        // Optional password update
+        if (!empty($new_password) || !empty($confirm_password)) {
+            if ($new_password !== $confirm_password) {
+                $error = "New passwords do not match.";
+            } elseif (strlen($new_password) < 6) {
+                $error = "Password must be at least 6 characters.";
+            } else {
+                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ? AND role = 'admin'");
+                $stmt->bind_param("si", $hashed_password, $admin_id);
+                if ($stmt->execute()) {
+                    $msg .= " Password changed!";
+                } else {
+                    $error = "Name updated, but failed to update password.";
+                }
+                $stmt->close();
+            }
         }
     }
 }
@@ -85,6 +102,7 @@ require_once 'includes/header.php';
 <div class="container" style="max-width: 1000px; margin: 40px auto; padding: 20px;">
     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <div>
+            <a href="index.php" style="background: #e2e8f0; color: #475569; padding: 8px 20px; border-radius: 40px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; font-size: 0.95rem; margin-bottom: 20px; transition: all 0.3s; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05);" onmouseover="this.style.background='#cbd5e1'; this.style.transform='translateX(-3px)'; this.style.color='var(--primary-color)';" onmouseout="this.style.background='#e2e8f0'; this.style.transform='none'; this.style.color='#475569';">&larr; Back to Selection</a>
             <h1 style="color: white; margin: 0; font-size: 2.5rem; font-weight: 800;">Admin Management</h1>
             <p style="color: #94a3b8; margin-top: 5px;">Create and manage system administrators.</p>
         </div>
@@ -141,8 +159,8 @@ require_once 'includes/header.php';
                             </td>
                             <td style="padding: 20px;">
                                 <div style="display: flex; gap: 8px;">
-                                    <button onclick="openChangePasswordModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars($admin['username']); ?>')" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white';" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.color='#cbd5e1';">
-                                        🔑 Password
+                                    <button onclick="openEditAdminModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars(addslashes($admin['username'])); ?>', '<?php echo htmlspecialchars(addslashes($admin['full_name'])); ?>')" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white';" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.color='#cbd5e1';">
+                                        ✏️ Edit Profile
                                     </button>
                                     <button onclick="openStatusModal(<?php echo $admin['id']; ?>, '<?php echo htmlspecialchars($admin['username']); ?>', '<?php echo $admin['status']; ?>')" style="background: <?php echo $admin['status'] === 'enabled' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)'; ?>; color: <?php echo $admin['status'] === 'enabled' ? '#fca5a5' : '#4ade80'; ?>; border: 1px solid <?php echo $admin['status'] === 'enabled' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(34, 197, 94, 0.2)'; ?>; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;" onmouseover="this.style.filter='brightness(1.2)';" onmouseout="this.style.filter='brightness(1)';">
                                         <?php echo $admin['status'] === 'enabled' ? '🚫 Disable' : '✅ Enable'; ?>
@@ -189,24 +207,28 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Change Password Modal -->
-<div id="passwordModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+<!-- Edit Admin Modal -->
+<div id="editAdminModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #1e293b; width: 100%; max-width: 450px; border-radius: 24px; padding: 40px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); animation: modalFade 0.3s ease-out;">
-        <h2 style="color: white; margin-top: 0; margin-bottom: 10px;">Change Password</h2>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Reset password for admin: <strong id="adminUsername" style="color: white;"></strong></p>
+        <h2 style="color: white; margin-top: 0; margin-bottom: 10px;">Edit Admin Profile</h2>
+        <p style="color: #94a3b8; margin-bottom: 30px;">Update info for: <strong id="adminUsername" style="color: white;"></strong></p>
         <form method="POST">
             <input type="hidden" name="admin_id" id="modal_admin_id">
             <div style="margin-bottom: 20px;">
-                <label style="display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">New Password</label>
-                <input type="password" name="new_password" required style="width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; color: white; box-sizing: border-box;">
+                <label style="display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">Full Name</label>
+                <input type="text" name="full_name" id="modal_full_name" required style="width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; color: white; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 20px; border-top: 1px solid #334155; padding-top: 25px; margin-top: 5px;">
+                <label style="display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">New Password (Optional)</label>
+                <input type="password" name="new_password" placeholder="Leave blank to keep current password" style="width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; color: white; box-sizing: border-box;">
             </div>
             <div style="margin-bottom: 30px;">
                 <label style="display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">Confirm New Password</label>
-                <input type="password" name="confirm_password" required style="width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; color: white; box-sizing: border-box;">
+                <input type="password" name="confirm_password" placeholder="Leave blank to keep current password" style="width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 12px; color: white; box-sizing: border-box;">
             </div>
             <div style="display: flex; gap: 12px;">
-                <button type="submit" name="change_password" style="flex: 2; background: linear-gradient(to right, #4f46e5, #818cf8); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer;">Update Password</button>
-                <button type="button" onclick="document.getElementById('passwordModal').style.display='none'" style="flex: 1; background: transparent; border: 1px solid #334155; color: #cbd5e1; padding: 14px; border-radius: 12px; cursor: pointer;">Cancel</button>
+                <button type="submit" name="edit_admin" style="flex: 2; background: linear-gradient(to right, #4f46e5, #818cf8); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer;">Save Changes</button>
+                <button type="button" onclick="document.getElementById('editAdminModal').style.display='none'" style="flex: 1; background: transparent; border: 1px solid #334155; color: #cbd5e1; padding: 14px; border-radius: 12px; cursor: pointer;">Cancel</button>
             </div>
         </form>
     </div>
@@ -230,10 +252,11 @@ require_once 'includes/header.php';
 </div>
 
 <script>
-function openChangePasswordModal(id, username) {
+function openEditAdminModal(id, username, full_name) {
     document.getElementById('modal_admin_id').value = id;
     document.getElementById('adminUsername').innerText = username;
-    document.getElementById('passwordModal').style.display = 'flex';
+    document.getElementById('modal_full_name').value = full_name;
+    document.getElementById('editAdminModal').style.display = 'flex';
 }
 
 function openStatusModal(id, username, status) {
@@ -269,8 +292,8 @@ window.onclick = function(event) {
     if (event.target == document.getElementById('createAdminModal')) {
         document.getElementById('createAdminModal').style.display = 'none';
     }
-    if (event.target == document.getElementById('passwordModal')) {
-        document.getElementById('passwordModal').style.display = 'none';
+    if (event.target == document.getElementById('editAdminModal')) {
+        document.getElementById('editAdminModal').style.display = 'none';
     }
     if (event.target == document.getElementById('statusModal')) {
         document.getElementById('statusModal').style.display = 'none';
