@@ -132,8 +132,8 @@ body::after {
 .header {
     position: absolute;
     top: 0.25in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     text-align: center;
     line-height: 1.1;
 }
@@ -208,8 +208,8 @@ body::after {
 .title-section {
     position: absolute;
     top: 3.2in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     text-align: center;
 }
 
@@ -224,8 +224,8 @@ body::after {
 .salutation {
     position: absolute;
     top: 4.5in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     font-weight: normal;
     text-transform: uppercase;
     font-size: 13pt;
@@ -235,8 +235,8 @@ body::after {
 .content {
     position: absolute;
     top: 4.9in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     text-align: justify;
     font-size: 12pt;
     line-height: 2.0;
@@ -263,8 +263,8 @@ body::after {
 .signatory-section {
     position: absolute;
     bottom: 1.8in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -305,8 +305,8 @@ body::after {
 .footer-section {
     position: absolute;
     bottom: 0.3in;
-    left: 1.0in;
-    right: 1.0in;
+    left: 0.9in;
+    right: 0.9in;
     border-top: 2px solid #000;
     padding-top: 5px;
     display: flex;
