@@ -244,14 +244,14 @@ function get_certificate_content($type, $data)
         case 'GOOD MORAL CHARACTER':
             $content['title'] = "CERTIFICATE OF<br>GOOD MORAL CHARACTER";
             $content['body'] = "<p>This is to certify that $sn was a bona fide student of this school under <strong>$curriculum</strong> during the school year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p style=\"white-space: nowrap;\">The student has no derogatory records filed in this office as of this date.</p>";
+            $content['body'] .= "<p style=\"font-size: 12pt;\">The student has no derogatory records filed in this office as of this date.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong>.</p>";
             break;
 
         case 'GOOD MORAL CHARACTER (SCHOOL TRANSFER)':
             $content['title'] = "CERTIFICATE OF<br>GOOD MORAL CHARACTER";
             $content['body'] = "<p>This is to certify that $student_info was a bona fide <strong>$grade &ndash; $section</strong> student of this school under <strong>$curriculum</strong> during the school year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p style=\"white-space: nowrap;\">The student has no derogatory records filed in this office as of this date.</p>";
+            $content['body'] .= "<p style=\"font-size: 12pt;\">The student has no derogatory records filed in this office as of this date.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong> purposes.</p>";
             break;
 
