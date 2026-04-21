@@ -29,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_name'] = $user['full_name'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['user_role'] = $user['role'];
-                
+
                 // Update last login
                 $conn->query("UPDATE users SET last_login = NOW() WHERE id = " . $user['id']);
-                
+
                 header("Location: index.php");
                 exit();
             } else {
@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,12 +85,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             z-index: -1;
             opacity: 0.5;
         }
-        .c1 { width: 400px; height: 400px; background: #4f46e5; top: -100px; right: -100px; animation: float 10s infinite alternate; }
-        .c2 { width: 300px; height: 300px; background: #7c3aed; bottom: -50px; left: -50px; animation: float 12s infinite alternate-reverse; }
+
+        .c1 {
+            width: 400px;
+            height: 400px;
+            background: #4f46e5;
+            top: -100px;
+            right: -100px;
+            animation: float 10s infinite alternate;
+        }
+
+        .c2 {
+            width: 300px;
+            height: 300px;
+            background: #7c3aed;
+            bottom: -50px;
+            left: -50px;
+            animation: float 12s infinite alternate-reverse;
+        }
 
         @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 50px);
+            }
         }
 
         .login-card {
@@ -105,8 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .logo-section {
@@ -220,6 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body>
     <div class="circle c1"></div>
     <div class="circle c2"></div>
@@ -227,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-card">
         <div class="logo-section">
             <div class="logo-circle">📑</div>
-            <h1>Welcome Back</h1>
+            <h1>Welcome</h1>
             <p class="subtitle">Please enter your credentials.</p>
         </div>
 
@@ -252,4 +282,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="footer-text">&copy; <?php echo date('Y'); ?> CertGen Management System</p>
     </div>
 </body>
+
 </html>

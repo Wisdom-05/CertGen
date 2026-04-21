@@ -95,16 +95,29 @@ body::after {
 }
 
 @keyframes meshMovement {
-    0% { transform: translate(-2%, -2%) rotate(0deg); }
-    100% { transform: translate(2%, 2%) rotate(3deg); }
+    0% {
+        transform: translate(-2%, -2%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(2%, 2%) rotate(3deg);
+    }
 }
 
 @keyframes pulseWatermark {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.08); }
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.08);
+    }
 }
 
 @media print {
+
     body::after,
     body::before {
         display: none !important;
@@ -457,8 +470,344 @@ body::after {
     fill: currentColor;
 }
 
+/* =========================================
+   Reconstructed Diploma Specific Styles
+   ========================================= */
+
+.certificate-container.diploma-layout {
+    width: 11.23in;
+    height: 7.94in;
+    margin: 50px auto;
+    background: #e8e8e8;
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+    border: 40px solid transparent;
+    border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M10 10h80v80H10z' fill='none' stroke='%23333' stroke-width='2'/%3E%3Cpath d='M5 5h90v90H5z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E") 40 stretch;
+    padding: 0.1in 0.5in 0.5in;
+    color: #1a1a1a;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.05);
+}
+
+.diploma-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 10;
+}
+
+.diploma-layout .header {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: -22px;
+    line-height: normal;
+    margin-bottom: 0;
+}
+
+.diploma-logos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1px;
+    transform: translateY(35px);
+    margin-bottom: 5px;
+    padding: 0 80px;
+    position: relative;
+    z-index: 20;
+}
+
+.diploma-layout .header-logo {
+    width: 100px;
+    margin: 0;
+    filter: grayscale(1) contrast(1.2);
+}
+
+.diploma-layout .header p {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.diploma-layout .republic-text {
+    font-size: 11pt;
+    font-family: 'Old English Text MT', serif;
+}
+
+.diploma-layout .republic-text-en {
+    font-size: 8pt;
+    margin-bottom: 5px !important;
+}
+
+.diploma-layout .dept-text {
+    font-size: 16pt !important;
+}
+
+.diploma-layout .region-text,
+.diploma-layout .division-text {
+    font-size: 10pt;
+    font-family: 'Times New Roman', serif;
+}
+
+.diploma-layout .school-name {
+    font-size: 11pt;
+    margin-top: 0px;
+}
+
+.diploma-layout .content {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    padding: 0 0.9in;
+    line-height: 1.25;
+    z-index: 15;
+    margin-top: 0px;
+}
+
+.diploma-layout .content p {
+    text-indent: 0;
+    margin-bottom: 15px;
+}
+
+.diploma-layout .date-line {
+    text-align: center;
+    margin-top: 1px;
+    font-style: normal;
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+}
+
+.diploma-signatures {
+    bottom: 0.45in !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 20px;
+    /* Vertical gap 0, Horizontal gap 20 */
+    align-items: end !important;
+}
+
+.sig-name {
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 10.5pt;
+    border-bottom: 1.5px solid #000;
+    margin-bottom: 2px;
+    padding-bottom: 1px;
+    min-height: 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.sig-title {
+    text-align: center;
+    font-size: 9pt;
+    line-height: 1.2;
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    padding-top: 2px;
+}
+
+/* Removed transform since title now has two lines */
+.diploma-signatures .sig-title.right {
+    transform: none;
+}
+
+/* Moved signatories a little lower on screen, but will revert on print */
+.diploma-signatures .center {
+    transform: translateY(30px);
+}
+
+.diploma-intro {
+    text-align: center;
+    font-size: 11pt;
+    margin-bottom: 0px;
+}
+
+.diploma-intro-en {
+    text-align: center;
+    font-style: italic;
+    margin-top: -3px;
+    font-size: 8.5pt;
+}
+
+.student-name-wrapper {
+    text-align: center;
+    margin: 1px 0;
+}
+
+.student-name-cert {
+    font-family: "Old English Text MT", serif;
+    font-size: 28pt;
+    border-bottom: 1.5px solid #000;
+    display: inline-block;
+    padding: 0 30px;
+    min-width: 60%;
+}
+
+.diploma-paragraph {
+    text-align: center;
+    line-height: 1.15;
+    margin: 2px 60px;
+    font-size: 11pt;
+}
+
+.diploma-paragraph-en {
+    font-size: 8.5pt;
+    display: block;
+    margin-top: 1px;
+    font-style: italic;
+}
+
+.katibayan-section {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.diploma-label-reconstructed {
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 18pt;
+    letter-spacing: 4px;
+    line-height: 0.8;
+}
+
+.diploma-label-text {
+    font-family: "Times New Roman", serif;
+    font-size: 9pt;
+    letter-spacing: 8px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+/* Ornaments */
+.ornament-nw,
+.ornament-ne,
+.ornament-sw,
+.ornament-se {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 5;
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: brightness(0);
+}
+
+/* Using a simple corner flourish SVG */
+/* High-quality ornamental corners from Reference 1 style */
+.ornament-nw {
+    top: 10px;
+    left: 10px;
+    width: 120px;
+    height: 120px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 50 10, 50 50 Q 50 90, 90 90' fill='none' stroke='black' stroke-width='0.5'/%3E%3Cpath d='M10 10 L 20 10 L 20 20 L 10 20 Z'/%3E%3Cpath d='M15 15 L 35 15 Q 45 15, 45 25 L 45 45' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+.ornament-ne {
+    top: 10px;
+    right: 10px;
+    width: 120px;
+    height: 120px;
+    transform: scaleX(-1);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 50 10, 50 50 Q 50 90, 90 90' fill='none' stroke='black' stroke-width='0.5'/%3E%3Cpath d='M10 10 L 20 10 L 20 20 L 10 20 Z'/%3E%3Cpath d='M15 15 L 35 15 Q 45 15, 45 25 L 45 45' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+.ornament-sw {
+    bottom: 10px;
+    left: 10px;
+    width: 120px;
+    height: 120px;
+    transform: scaleY(-1);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 50 10, 50 50 Q 50 90, 90 90' fill='none' stroke='black' stroke-width='0.5'/%3E%3Cpath d='M10 10 L 20 10 L 20 20 L 10 20 Z'/%3E%3Cpath d='M15 15 L 35 15 Q 45 15, 45 25 L 45 45' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+.ornament-se {
+    bottom: 10px;
+    right: 10px;
+    width: 120px;
+    height: 120px;
+    transform: scale(-1);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 50 10, 50 50 Q 50 90, 90 90' fill='none' stroke='black' stroke-width='0.5'/%3E%3Cpath d='M10 10 L 20 10 L 20 20 L 10 20 Z'/%3E%3Cpath d='M15 15 L 35 15 Q 45 15, 45 25 L 45 45' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
 @media print {
-    .floating-home-btn {
-        display: none !important;
+    .diploma-layout {
+        background: #fdfaf0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Restore original layout for printing */
+    .diploma-layout .header {
+        margin-top: -15px !important;
+    }
+
+    .diploma-layout .header-logo {
+        width: 110px !important;
+    }
+
+    .diploma-layout .school-name {
+        margin-top: 0px !important;
+    }
+
+    .diploma-layout .content {
+        margin-top: 5px !important;
+    }
+
+    .diploma-layout .date-line {
+        margin-top: 10px !important;
+    }
+
+    .diploma-signatures {
+        bottom: 0.55in !important;
+    }
+
+    .diploma-intro {
+        font-size: 12pt !important;
+        margin-bottom: 2px !important;
+    }
+
+    .diploma-intro-en {
+        font-size: 9pt !important;
+    }
+
+    .student-name-wrapper {
+        margin: 5px 0 !important;
+    }
+
+    .student-name-cert {
+        font-size: 30pt !important;
+        padding: 0 40px !important;
+    }
+
+    .diploma-paragraph {
+        line-height: 1.5 !important;
+        margin: 6px 60px !important;
+        font-size: 11.5pt !important;
+    }
+
+    .diploma-paragraph-en {
+        font-size: 9pt !important;
+        margin-top: 2px !important;
+    }
+
+    .katibayan-section {
+        margin-top: 2px !important;
+    }
+
+    .diploma-label-reconstructed {
+        font-size: 24pt !important;
+        letter-spacing: 5px !important;
+    }
+
+    .diploma-label-text {
+        font-size: 10pt !important;
+        letter-spacing: 10px !important;
     }
 }

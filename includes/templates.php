@@ -244,14 +244,14 @@ function get_certificate_content($type, $data)
         case 'GOOD MORAL CHARACTER':
             $content['title'] = "CERTIFICATE OF<br>GOOD MORAL CHARACTER";
             $content['body'] = "<p>This is to certify that $sn was a bona fide student of this school under <strong>$curriculum</strong> during the school year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p style=\"text-indent: 48px; white-space: nowrap;\">The student has no derogatory records filed in this office as of this date.</p>";
+            $content['body'] .= "<p>The student has no derogatory records filed in this office as of this date.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong>.</p>";
             break;
 
         case 'GOOD MORAL CHARACTER (SCHOOL TRANSFER)':
             $content['title'] = "CERTIFICATE OF<br>GOOD MORAL CHARACTER";
             $content['body'] = "<p>This is to certify that $student_info was a bona fide <strong>$grade &ndash; $section</strong> student of this school under <strong>$curriculum</strong> during the school year <strong>$sy</strong>.</p>";
-            $content['body'] .= "<p style=\"text-indent: 48px; white-space: nowrap;\">The student has no derogatory records filed in this office as of this date.</p>";
+            $content['body'] .= "<p>The student has no derogatory records filed in this office as of this date.</p>";
             $content['body'] .= "<p>This certification is issued upon the request of the above-named student as a requirement for <strong>$purpose</strong> purposes.</p>";
             break;
 
@@ -315,6 +315,34 @@ function get_certificate_content($type, $data)
             $content['body'] = "<p>This is to certify that <strong>$school_name</strong>, located at <strong>$school_address</strong>, is a duly recognized and accredited public secondary school under the <strong>Department of Education - $division</strong>.</p>";
             $content['body'] .= "<p>The school operates under the <strong>K TO 12 BASIC EDUCATION PROGRAM</strong> and is authorized to issue official certifications and academic credentials.</p>";
             $content['body'] .= "<p>This certification is issued for <strong>$purpose</strong> purposes.</p>";
+            break;
+
+        case 'RECONSTRUCTED DIPLOMA':
+            $content['title'] = "RECONSTRUCTED DIPLOMA";
+            $content['body'] = "
+            <div class='diploma-intro'>Pinatutunayan nito na si</div>
+            <div class='diploma-intro-en'>This certifies that</div>
+            
+            <div class='student-name-wrapper'>
+                <div class='student-name-cert'>$sn</div>
+            </div>
+            
+            <div class='diploma-paragraph'>
+                ay kasiya-siya nakatupad sa mga kinakailangan sa pagtatapos ng
+                <br>
+                <em class='diploma-paragraph-en'>has satisfactorily completed the requirements for graduation in accordance with the</em>
+                <strong>BAGONG KURIKULUM SA EDUKASYONG SEKUNDARYA</strong> na itinakda para sa mataas na paaralan ng
+                <br>
+                <em class='diploma-paragraph-en'>New Secondary Education Curriculum prescribed for secondary schools of the</em>
+                Republika ng Pilipinas, kaya siya'y karapat-dapat tumanggap nitong
+                <br>
+                <em class='diploma-paragraph-en'>Republic of the Philippines and is therefore entitled to this</em>
+            </div>
+            
+            <div class='katibayan-section'>
+                <div class='diploma-label-reconstructed'>RECONSTRUCTED</div>
+                <div class='diploma-label-text'>DIPLOMA</div>
+            </div>";
             break;
 
         default:
